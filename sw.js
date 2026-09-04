@@ -19,4 +19,33 @@ self.addEventListener('install', (e) => {
     );
 });
 
-// Activate service worker
+// Activate service workerself.addEventListener('activate', (e) => {
+    e.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(
+                keys.filter(key => key !== CACHE_NAME)
+                    .map(key => caches.delete(key))
+            );
+        })
+    );
+});
+
+// Fetch
+self.addEventListener('fetch', (e) => {
+    e.respondWith(
+        caches.match(e.request)
+            .then((response) => {
+                return response || fetch(e.request)
+                    .then((fetchRes) => {
+                        return caches.open(CACHE_NAME)
+                            .then((cache) => {
+                                cache.put(e.request, fetchRes.clone());
+                                return fetchRes;
+                            });
+                    })
+                    .catch(() => {
+                        return new Response('Offline', { status: 503 });
+                    });
+            })
+    );
+});
