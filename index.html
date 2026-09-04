@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quản Lý Chi Tiêu Gia Đình</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4A6CF7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>💰 Quản Lý Chi Tiêu</h1>
+            <div class="header-actions">
+                <button class="btn-icon" id="themeToggle" aria-label="Chuyển đổi chế độ tối/sáng">
+                    🌙
+                </button>
+                <button class="btn-icon" id="resetBtn" aria-label="Đặt lại">
+                    🔄
+                </button>
+            </div>
+        </div>
+        <div class="date-display">
+            <span id="currentDate"></span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Tổng quan -->
+        <section class="summary-cards">
+            <div class="card balance-card">
+                <div class="card-label">💰 Số dư hiện tại</div>
+                <div class="card-value" id="balance">0đ</div>
+                <div class="card-sub">Cập nhật: <span id="lastUpdate">Hôm nay</span></div>
+            </div>
+            <div class="card income-card">
+                <div class="card-label">📈 Tổng thu nhập</div>
+                <div class="card-value" id="totalIncome">0đ</div>
+            </div>
+            <div class="card expense-card">
+                <div class="card-label">📉 Tổng chi tiêu</div>
+                <div class="card-value" id="totalExpense">0đ</div>
+            </div>
+        </section>
+
+        <!-- Thêm giao dịch -->
+        <section class="add-transaction">
+            <h2>➕ Thêm giao dịch</h2>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <input type="text" id="description" placeholder="Ví dụ: Mua thực phẩm" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">Số tiền</label>
+                        <input type="number" id="amount" placeholder="0" min="0" step="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Danh mục</label>
+                        <select id="category" required>
+                            <option value="food">🍔 Ăn uống</option>
+                            <option value="transport">🚗 Di chuyển</option>
+                            <option value="shopping">🛍️ Mua sắm</option>
+                            <option value="bills">🧾 Hóa đơn</option>
+                            <option value="health">🏥 Sức khỏe</option>
+                            <option value="education">📚 Giáo dục</option>
+                            <option value="entertainment">🎬 Giải trí</option>
+                            <option value="other">📦 Khác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="type">Loại giao dịch</label>
+                        <select id="type" required>
+                            <option value="expense">Chi tiêu</option>
+                            <option value="income">Thu nhập</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Ngày</label>
+                        <input type="date" id="date" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Thêm giao dịch</button>
+            </form>
+        </section>
+
+        <!-- Bộ lọc -->
+        <section class="filters">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">Tất cả</button>
+                <button class="filter-btn" data-filter="income">Thu nhập</button>
+                <button class="filter-btn" data-filter="expense">Chi tiêu</button>
+            </div>
+            <div class="filter-group">
+                <select id="categoryFilter">
+                    <option value="all">Tất cả danh mục</option>
+                    <option value="food">🍔 Ăn uống</option>
+                    <option value="transport">🚗 Di chuyển</option>
+                    <option value="shopping">🛍️ Mua sắm</option>
+                    <option value="bills">🧾 Hóa đơn</option>
+                    <option value="health">🏥 Sức khỏe</option>
+                    <option value="education">📚 Giáo dục</option>
+                    <option value="entertainment">🎬 Giải trí</option>
+                    <option value="other">📦 Khác</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Danh sách giao dịch -->
+        <section class="transactions">
+            <div class="transactions-header">
+                <h2>📋 Lịch sử giao dịch</h2>
+                <span id="transactionCount">0 giao dịch</span>
+            </div>
+            <div id="transactionList">
+                <div class="empty-state">
+                    <span>📭</span>
+                    <p>Chưa có giao dịch nào</p>
+                    <small>Hãy thêm giao dịch đầu tiên!</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thống kê -->
+        <section class="statistics">
+            <h2>📊 Thống kê theo danh mục</h2>
+            <div id="categoryStats">
+                <div class="empty-state">
+                    <span>📊</span>
+                    <p>Chưa có dữ liệu thống kê</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Quản Lý Chi Tiêu Gia Đình</p>
+        <p>Dữ liệu được lưu cục bộ trên thiết bị của bạn</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
